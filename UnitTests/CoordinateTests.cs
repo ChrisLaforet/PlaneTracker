@@ -35,10 +35,30 @@ public class CoordinateTests
         Assert.Equal(expected.WGS84Coordinate, newCoordinate.WGS84Coordinate);
     }
     
-    // [Fact]
-    // public void GivenLongitudeOnEquator_WhenAddingNauticalMiles_ThenReturnsNewCoordinate()
-    // {
-    //     var coordinate = new Coordinate(0);
-    //     var newCoordinate = coordinate.AddLongitudinalNauticalMiles();
-    // }
+    [Fact]
+    public void GivenLongitudeOnEquator_WhenAddingNauticalMiles_ThenReturnsNewCoordinate()
+    {
+        var latitude = new Coordinate(0);
+        var coordinate = new Coordinate(0);
+        var newCoordinate = coordinate.AddNauticalMilesToLongitude(NAUTICAL_MILES, latitude);
+        Assert.Equal(0.33273f, newCoordinate.WGS84Coordinate);
+    }
+    
+    [Fact]
+    public void GivenLongitudeOn45Degrees_WhenAddingNauticalMiles_ThenReturnsNewCoordinate()
+    {
+        var latitude = new Coordinate(45);
+        var coordinate = new Coordinate(0);
+        var newCoordinate = coordinate.AddNauticalMilesToLongitude(NAUTICAL_MILES, latitude);
+        Assert.Equal(0.6333829f, newCoordinate.WGS84Coordinate);
+    }
+    
+    [Fact]
+    public void GivenLongitudeOn70Degrees_WhenAddingNauticalMiles_ThenReturnsNewCoordinate()
+    {
+        var latitude = new Coordinate(70);
+        var coordinate = new Coordinate(0);
+        var newCoordinate = coordinate.AddNauticalMilesToLongitude(NAUTICAL_MILES, latitude);
+        Assert.Equal(0.6333829f, newCoordinate.WGS84Coordinate);
+    }
 }

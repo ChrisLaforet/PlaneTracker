@@ -6,13 +6,4 @@
 		<Nullable>enable</Nullable>
 	</PropertyGroup>
 
-	<ItemGroup>
-	  <Folder Include="Adapter" />
-	  <Folder Include="Model" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\Coordinator\Coordinator.csproj" />
-	</ItemGroup>
-
 </Project>

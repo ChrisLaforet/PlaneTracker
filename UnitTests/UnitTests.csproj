@@ -21,4 +21,9 @@
 		</PackageReference>
 	</ItemGroup>
 
+	<ItemGroup>
+	  <ProjectReference Include="..\ADSBLookup\ADSBLookup.csproj" />
+	  <ProjectReference Include="..\Coordinator\Coordinator.csproj" />
+	</ItemGroup>
+
 </Project>

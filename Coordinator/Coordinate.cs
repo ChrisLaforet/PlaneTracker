@@ -2,6 +2,7 @@
 
 public class Coordinate
 {
+    // https://www.thoughtco.com/degree-of-latitude-and-longitude-distance-4070616
     private const float NM_PER_DEGREE_LATITUDE = 60f;
     private const float NM_PER_DEGREE_LONGITUDE_AT_EQUATOR = 60.1088f;
 
@@ -36,9 +37,23 @@ public class Coordinate
 
     public Coordinate AddNauticalMilesToLongitude(float nauticalMiles, Coordinate latitude)
     {
-        double nmPerDegree = NM_PER_DEGREE_LONGITUDE_AT_EQUATOR * Math.Cos(latitude.WGS84Coordinate);
-        float degrees = (float)(nauticalMiles / nmPerDegree);
-        float newDegrees = this.WGS84Coordinate + degrees;
+        float newDegrees;
+        if (latitude.WGS84Coordinate == 0)
+        {
+            float degrees = (float)(nauticalMiles / NM_PER_DEGREE_LONGITUDE_AT_EQUATOR); 
+            newDegrees = this.WGS84Coordinate + degrees;
+        }
+        else if (latitude.WGS84Coordinate == 90 || latitude.WGS84Coordinate == -90)
+        {
+            newDegrees = 0;
+        }
+        else
+        {
+            double radians = Math.PI * latitude.WGS84Coordinate / 180.0;
+            double nmPerDegree = NM_PER_DEGREE_LONGITUDE_AT_EQUATOR * Math.Cos(radians);
+            float degrees = (float)(nauticalMiles / nmPerDegree); 
+            newDegrees = this.WGS84Coordinate + degrees;     
+        }
 
         return new Coordinate(newDegrees);
     }

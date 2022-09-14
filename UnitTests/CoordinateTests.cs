@@ -45,20 +45,48 @@ public class CoordinateTests
     }
     
     [Fact]
-    public void GivenLongitudeOn45Degrees_WhenAddingNauticalMiles_ThenReturnsNewCoordinate()
+    public void GivenLongitudeOn45DegreesLatitude_WhenAddingNauticalMiles_ThenReturnsNewCoordinate()
     {
         var latitude = new Coordinate(45);
         var coordinate = new Coordinate(0);
         var newCoordinate = coordinate.AddNauticalMilesToLongitude(NAUTICAL_MILES, latitude);
-        Assert.Equal(0.6333829f, newCoordinate.WGS84Coordinate);
+        Assert.Equal(0.47055125f, newCoordinate.WGS84Coordinate);
     }
     
     [Fact]
-    public void GivenLongitudeOn70Degrees_WhenAddingNauticalMiles_ThenReturnsNewCoordinate()
+    public void GivenLongitudeOn40DegreesLatitude_WhenAddingNauticalMiles_ThenReturnsNewCoordinate()
+    {
+        var latitude = new Coordinate(40);
+        var coordinate = new Coordinate(0);
+        var newCoordinate = coordinate.AddNauticalMilesToLongitude(NAUTICAL_MILES, latitude);
+        Assert.Equal(0.43434817f, newCoordinate.WGS84Coordinate);
+    }
+    
+    [Fact]
+    public void GivenLongitudeOn70DegreesLatitude_WhenAddingNauticalMiles_ThenReturnsNewCoordinate()
     {
         var latitude = new Coordinate(70);
         var coordinate = new Coordinate(0);
         var newCoordinate = coordinate.AddNauticalMilesToLongitude(NAUTICAL_MILES, latitude);
-        Assert.Equal(0.6333829f, newCoordinate.WGS84Coordinate);
+        Assert.Equal(0.9728374f, newCoordinate.WGS84Coordinate);
+    }
+    
+        
+    [Fact]
+    public void GivenLongitudeOnNegative80DegreesLatitude_WhenAddingNauticalMiles_ThenReturnsNewCoordinate()
+    {
+        var latitude = new Coordinate(-80);
+        var coordinate = new Coordinate(0);
+        var newCoordinate = coordinate.AddNauticalMilesToLongitude(NAUTICAL_MILES, latitude);
+        Assert.Equal(1.9161156f, newCoordinate.WGS84Coordinate);
+    }
+    
+    [Fact]
+    public void GivenLongitudeOnNegative90DegreesLatitude_WhenAddingNauticalMiles_ThenReturnsNewCoordinate()
+    {
+        var latitude = new Coordinate(-90);
+        var coordinate = new Coordinate(0);
+        var newCoordinate = coordinate.AddNauticalMilesToLongitude(NAUTICAL_MILES, latitude);
+        Assert.Equal(0f, newCoordinate.WGS84Coordinate);
     }
 }

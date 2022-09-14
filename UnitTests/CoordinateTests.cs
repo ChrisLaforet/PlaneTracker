@@ -89,4 +89,47 @@ public class CoordinateTests
         var newCoordinate = coordinate.AddNauticalMilesToLongitude(NAUTICAL_MILES, latitude);
         Assert.Equal(0f, newCoordinate.WGS84Coordinate);
     }
+
+    [Fact]
+    public void GivenLongitudeOnEquator_WhenSubtractingNauticalMiles_ThenReturnsNewCoordinate()
+    {
+        var latitude = new Coordinate(0);
+        var coordinate = new Coordinate(0);
+        var newCoordinate = coordinate.SubtractNauticalMilesFromLongitude(NAUTICAL_MILES, latitude);
+        Assert.Equal(-0.33273f, newCoordinate.WGS84Coordinate);
+    }
+    
+    [Fact]
+    public void GivenLongitudeOnEquator_WhenAddingMoreThanEarthCircumferenceOfNauticalMiles_ThenReturnsNewCoordinate()
+    {
+        var latitude = new Coordinate(0);
+        var coordinate = new Coordinate(0);
+        var newCoordinate = coordinate.AddNauticalMilesToLongitude(22000.0f, latitude);
+        Assert.Equal(6.0029907f, newCoordinate.WGS84Coordinate);
+    }
+    
+    [Fact]
+    public void GivenLongitudeOnEquator_WhenSubtractingMoreThanEarthCircumferenceOfNauticalMiles_ThenReturnsNewCoordinate()
+    {
+        var latitude = new Coordinate(0);
+        var coordinate = new Coordinate(0);
+        var newCoordinate = coordinate.SubtractNauticalMilesFromLongitude(22000.0f, latitude);
+        Assert.Equal(-6.0029907f, newCoordinate.WGS84Coordinate);
+    }
+    
+    [Fact]
+    public void GivenPositiveLatitude_WhenAddingNauticalMilesBeyond90Degrees_ThenReturnsNewCoordinate()
+    {
+        var coordinate = new Coordinate(45);
+        var newCoordinate = coordinate.AddNauticalMilesToLatitude(3300);
+        Assert.Equal(80f, newCoordinate.WGS84Coordinate);
+    }
+    
+    [Fact]
+    public void GivenPositiveLatitude_WhenSubtractingNauticalMilesBeyondNegative90Degrees_ThenReturnsNewCoordinate()
+    {
+        var coordinate = new Coordinate(45);
+        var newCoordinate = coordinate.SubtractNauticalMilesFromLatitude(8700);
+        Assert.Equal(-80f, newCoordinate.WGS84Coordinate);
+    }
 }

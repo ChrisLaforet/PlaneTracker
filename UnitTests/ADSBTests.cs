@@ -1,4 +1,5 @@
 using ADSBLookup.OpenNetwork.Mapper;
+using ADSBLookup.OpenNetwork.Model;
 
 namespace UnitTests;
 
@@ -11,7 +12,11 @@ public class ADSBTests
         var response = OpenNetworkMapper.DecodeStatesAllResponse(json);
         Assert.NotNull(response);
         Assert.Equal(1663196848, response.Time);
-}
+        Assert.Equal("a4be27", response.State.ICAO24);
+        Assert.Equal(92.72f, response.State.Velocity);
+        Assert.False(response.State.OnGround);
+        Assert.Equal(1663196847, response.State.TimePosition);
+    }
     
     /*
     {

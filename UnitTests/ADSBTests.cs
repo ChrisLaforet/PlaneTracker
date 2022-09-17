@@ -12,10 +12,21 @@ public class ADSBTests
         var response = OpenNetworkMapper.DecodeStatesAllResponse(json);
         Assert.NotNull(response);
         Assert.Equal(1663196848, response.Time);
-        Assert.Equal("a4be27", response.State.ICAO24);
-        Assert.Equal(92.72f, response.State.Velocity);
-        Assert.False(response.State.OnGround);
-        Assert.Equal(1663196847, response.State.TimePosition);
+        Assert.Equal("a4be27", response.State[0].ICAO24);
+        Assert.Equal(92.72f, response.State[0].Velocity);
+        Assert.False(response.State[0].OnGround);
+        Assert.Equal(1663196847, response.State[0].TimePosition);
+    }
+
+    [Fact]
+    public void GivenAllStatesJSONFromOpenNetwork_WhenTwoAircraftReturned_ThenReturnsDeserializedModels()
+    {
+        string json = "{\"time\":1663196848,\"states\":[[\"a4be27\",\"N4042M  \",\"United States\",1663196847,1663196847,-79.6779,36.2558,1341.12,false,92.72,254.88,0.33,null,1394.46,null,false,0],[\"ace6e2\",\"AAL1982 \",\"United States\",1663196848,1663196848,-77.2511,35.7216,11582.4,false,205.72,215.64,0,null,12108.18,\"7076\",false,0]]}";
+        var response = OpenNetworkMapper.DecodeStatesAllResponse(json);
+        Assert.NotNull(response);
+        Assert.Equal(1663196848, response.Time);
+        Assert.Equal("a4be27", response.State[0].ICAO24);
+        Assert.Equal("ace6e2", response.State[1].ICAO24);
     }
     
     /*

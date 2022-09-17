@@ -11,9 +11,9 @@ public class OpenNetworkAllResponse
     [JsonPropertyName("states")] 
     public JsonElement States { get; set; }
     
-    private OpenNetworkState state;
+    private List<OpenNetworkState> state;
     
-    public OpenNetworkState State
+    public List<OpenNetworkState> State
     {
         get
         {
@@ -22,12 +22,15 @@ public class OpenNetworkAllResponse
                 return state;
             }
 
-            state = new OpenNetworkState();
+            state = new List<OpenNetworkState>();
+
             var arrayEnumerator = States.EnumerateArray();
             while (arrayEnumerator.MoveNext())
             {
                 var array = arrayEnumerator.Current;
                 int index = 0;
+                var record = new OpenNetworkState();
+
                 var enumerator = array.EnumerateArray();
                 while (enumerator.MoveNext())
                 {
@@ -35,63 +38,64 @@ public class OpenNetworkAllResponse
                     switch (index)
                     {
                         case 0:
-                            state.ICAO24 = ExtractStringFrom(property);
+                            record.ICAO24 = ExtractStringFrom(property);
                             break;
                         case 1:
-                            state.CallSign = ExtractStringFrom(property).Trim();
+                            record.CallSign = ExtractStringFrom(property).Trim();
                             break;
                         case 2:
-                            state.OriginCountry = ExtractStringFrom(property);
+                            record.OriginCountry = ExtractStringFrom(property);
                             break;
                         case 14:
-                            state.Squawk = ExtractStringFrom(property);
+                            record.Squawk = ExtractStringFrom(property);
                             break;
                         
                         case 5:
-                            state.Longitude = (float)ExtractFloatFrom(property);
+                            record.Longitude = (float)ExtractFloatFrom(property);
                             break;
                         case 6:
-                            state.Latitude = (float)ExtractFloatFrom(property);
+                            record.Latitude = (float)ExtractFloatFrom(property);
                             break;
                         case 7:
-                            state.BaroAltitude = (float)ExtractFloatFrom(property);
+                            record.BaroAltitude = (float)ExtractFloatFrom(property);
                             break;
                         case 9:
-                            state.Velocity = (float)ExtractFloatFrom(property);
+                            record.Velocity = (float)ExtractFloatFrom(property);
                             break;
                         case 10:
-                            state.TrueTrack = ExtractFloatFrom(property);
+                            record.TrueTrack = ExtractFloatFrom(property);
                             break;
                         case 11:
-                            state.VerticalRate = ExtractFloatFrom(property);
+                            record.VerticalRate = ExtractFloatFrom(property);
                             break;
                         case 13:
-                            state.GeoAltitude = (float)ExtractFloatFrom(property);
+                            record.GeoAltitude = (float)ExtractFloatFrom(property);
                             break;
                         
                         case 3:
-                            state.TimePosition = (int)ExtractIntFrom(property);
+                            record.TimePosition = (int)ExtractIntFrom(property);
                             break;
                         case 4:
-                            state.LastContact = (int)ExtractIntFrom(property);
+                            record.LastContact = (int)ExtractIntFrom(property);
                             break;
                         case 16:
-                            state.PositionSource = (int)ExtractIntFrom(property);
+                            record.PositionSource = (int)ExtractIntFrom(property);
                             break;
                         case 17:
-                            state.Category = ExtractIntFrom(property);
+                            record.Category = ExtractIntFrom(property);
                             break;
                         
                         case 8:
-                            state.OnGround = (bool)ExtractBoolFrom(property);
+                            record.OnGround = (bool)ExtractBoolFrom(property);
                             break;
                         case 15:
-                            state.Spi = (bool)ExtractBoolFrom(property);
+                            record.Spi = (bool)ExtractBoolFrom(property);
                             break;
                     }
 
                     ++index;
                 }
+                state.Add(record);
             }
 
             return state;

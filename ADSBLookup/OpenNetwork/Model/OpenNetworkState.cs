@@ -1,6 +1,6 @@
 namespace ADSBLookup.OpenNetwork.Model;
 
-public class OpenNetworkState
+public class OpenNetworkState : IPlane
 {
     public string ICAO24 { get; set; }
     public string CallSign { get; set; }

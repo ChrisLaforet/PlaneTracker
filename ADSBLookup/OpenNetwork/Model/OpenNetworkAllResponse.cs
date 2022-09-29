@@ -57,10 +57,10 @@ public class OpenNetworkAllResponse
                             record.Latitude = (float)ExtractFloatFrom(property);
                             break;
                         case 7:
-                            record.BaroAltitude = (float)ExtractFloatFrom(property);
+                            record.BaroAltitude = ExtractFloatFrom(property);
                             break;
                         case 9:
-                            record.Velocity = (float)ExtractFloatFrom(property);
+                            record.Velocity = ExtractFloatFrom(property);
                             break;
                         case 10:
                             record.TrueTrack = ExtractFloatFrom(property);
@@ -69,9 +69,8 @@ public class OpenNetworkAllResponse
                             record.VerticalRate = ExtractFloatFrom(property);
                             break;
                         case 13:
-                            record.GeoAltitude = (float)ExtractFloatFrom(property);
+                            record.GeoAltitude = ExtractFloatFrom(property);
                             break;
-                        
                         case 3:
                             record.TimePosition = (int)ExtractIntFrom(property);
                             break;

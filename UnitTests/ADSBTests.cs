@@ -1,5 +1,4 @@
 using ADSBLookup.OpenNetwork.Mapper;
-using ADSBLookup.OpenNetwork.Model;
 
 namespace UnitTests;
 

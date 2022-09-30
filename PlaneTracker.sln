@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\Unit
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Coordinator", "Coordinator\Coordinator.csproj", "{C86762DD-E5A7-4CD5-AFFC-F1F7BEBFD270}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaneTrackerConsole", "PlaneTrackerConsole\PlaneTrackerConsole.csproj", "{97B39CE3-86F6-45DE-A23A-DD91CB4D565D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{C86762DD-E5A7-4CD5-AFFC-F1F7BEBFD270}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C86762DD-E5A7-4CD5-AFFC-F1F7BEBFD270}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C86762DD-E5A7-4CD5-AFFC-F1F7BEBFD270}.Release|Any CPU.Build.0 = Release|Any CPU
+		{97B39CE3-86F6-45DE-A23A-DD91CB4D565D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97B39CE3-86F6-45DE-A23A-DD91CB4D565D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97B39CE3-86F6-45DE-A23A-DD91CB4D565D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97B39CE3-86F6-45DE-A23A-DD91CB4D565D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

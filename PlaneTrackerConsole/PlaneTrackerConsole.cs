@@ -1,8 +1,11 @@
-﻿using ADSBLookup;
+﻿using System.Diagnostics.Contracts;
+using ADSBLookup;
 using ADSBLookup.OpenNetwork.Lookup;
 using AirportLookup.FlightLabs.Lookup;
 using Configurator;
 using Coordinator;
+using FlightPlanLookup;
+using FlightPlanLookup.AviationStack.Lookup;
 
 namespace PlaneTrackerConsole;
 
@@ -36,19 +39,38 @@ public class PlaneTrackerConsole
         var airport = matches[0];
         Console.WriteLine($"Loaded data for airport {airport.Name} with IATA code of {iataCode}");
         
+        var flightPlanLookup = new AviationStackLookup(configurationLoader.GetKeyValueFor(AVIATION_STACK_KEY));
+
         // Testing airport coordinates with a box extending 50NM each compass cardinal direction (NSEW)
 //      var planes = lookup.GetPlanesCenteredOn(new Coordinate(35.8801f), new Coordinate(-78.7880f), 100f);
         var planes = lookup.GetPlanesCenteredOn(new Coordinate(airport.AirportLatitude), new Coordinate(airport.AirportLongitude), 100f);
         foreach (var plane in planes)
         {
-            Console.Write(plane.ICAO24);
-            Console.Write("->");
-            Console.Write(plane.CallSign);
-            Console.Write(": Altitude (ft): ");
-            Console.Write(plane.AltitudeInFeet);
-            Console.Write(": Speed (kt): ");
-            Console.Write(plane.VelocityInKnots);
-            Console.WriteLine();
+            ShowPlane(plane, flightPlanLookup);
         }
+    }
+
+    private static void ShowPlane(IPlane plane, IFlightPlanLookup flightPlanLookup)
+    {
+        Console.WriteLine($"{plane.ICAO24} -> Call sign: {plane.CallSign} -- Type: {plane.PlaneType}");
+        Console.WriteLine($"\tPosition: {plane.Latitude} (lat), {plane.Longitude} (long)");
+        Console.WriteLine($"\tTrack: {plane.TrueTrack}");
+        Console.WriteLine($"\tAltitude (ft): {plane.AltitudeInFeet}");
+        Console.WriteLine($"\tSpeed (kt): {plane.VelocityInKnots}");
+        Console.WriteLine($"\tVertical rate (ft/s): {plane.VerticalRateInFeetPerSecond}");
+
+        // if (plane.PlaneType == PlaneType.Plane && plane.CallSign != null && plane.CallSign.Length == 7)
+        // {
+        //     var flightPlans = flightPlanLookup.GetFlightPlanForFlightIATA(plane.CallSign);
+        //     if (flightPlans.Count > 0)
+        //     {
+        //         var flightPlan = flightPlans[0];
+        //         Console.WriteLine($"$\tFlight departed: {flightPlan.DepartureAirportName} -- ICAO: {flightPlan.DepartureAirportICAOCode} -- IATA: {flightPlan.DepartureAirportIATACode}");
+        //         Console.WriteLine($"$\tFlight destination: {flightPlan.ArrivalAirportName} -- ICAO: {flightPlan.ArrivalAirportICAOCode} -- IATA: {flightPlan.ArrivalAirportIATACode}");
+        //     }
+        // }
+
+        Console.WriteLine("-------------");
+        Console.WriteLine();
     }
 }

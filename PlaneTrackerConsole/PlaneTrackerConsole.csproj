@@ -12,6 +12,7 @@
 	  <ProjectReference Include="..\AirportLookup\AirportLookup.csproj" />
 	  <ProjectReference Include="..\Configurator\Configurator.csproj" />
 	  <ProjectReference Include="..\Coordinator\Coordinator.csproj" />
+	  <ProjectReference Include="..\FlightPlanLookup\FlightPlanLookup.csproj" />
 	</ItemGroup>
 
 </Project>

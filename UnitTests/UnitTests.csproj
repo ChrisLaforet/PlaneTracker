@@ -23,6 +23,7 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\ADSBLookup\ADSBLookup.csproj" />
+	  <ProjectReference Include="..\AirportLookup\AirportLookup.csproj" />
 	  <ProjectReference Include="..\Coordinator\Coordinator.csproj" />
 	</ItemGroup>
 

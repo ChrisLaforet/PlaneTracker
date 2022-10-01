@@ -10,7 +10,8 @@ public class PlaneTrackerConsole
     
     public static void Main(string[] args)
     {
-        var planes = lookup.GetPlanesCenteredOn(new Coordinate(35.4f), new Coordinate(-80f), 250f);
+        // Testing RDU airport coordinates with a box extending 50NM each compass cardinal direction (NSEW)
+        var planes = lookup.GetPlanesCenteredOn(new Coordinate(35.8801f), new Coordinate(-78.7880f), 100f);
         foreach (var plane in planes)
         {
             Console.Write(plane.ICAO24);

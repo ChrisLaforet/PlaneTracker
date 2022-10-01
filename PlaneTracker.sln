@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaneTrackerConsole", "Plan
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Configurator", "Configurator\Configurator.csproj", "{39A80BE7-8ADA-4A49-9DBD-C1ACDF3FA06D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AirportLookup", "AirportLookup\AirportLookup.csproj", "{83EEC3DF-7295-456B-839C-93AE3B4DA010}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{39A80BE7-8ADA-4A49-9DBD-C1ACDF3FA06D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{39A80BE7-8ADA-4A49-9DBD-C1ACDF3FA06D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{39A80BE7-8ADA-4A49-9DBD-C1ACDF3FA06D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83EEC3DF-7295-456B-839C-93AE3B4DA010}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83EEC3DF-7295-456B-839C-93AE3B4DA010}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83EEC3DF-7295-456B-839C-93AE3B4DA010}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83EEC3DF-7295-456B-839C-93AE3B4DA010}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

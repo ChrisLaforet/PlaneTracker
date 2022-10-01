@@ -4,7 +4,7 @@ using ADSBLookup.OpenNetwork.Model;
 
 namespace ADSBLookup.OpenNetwork.Mapper;
 
-public class OpenNetworkMapper
+public static class OpenNetworkMapper
 {
     public static OpenNetworkAllResponse? DecodeStatesAllResponse(string response)
     {
@@ -14,5 +14,4 @@ public class OpenNetworkMapper
                 PropertyNameCaseInsensitive = true
             });
     }
-    
 }

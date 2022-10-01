@@ -10,7 +10,11 @@ This code is not intended for any critical use that can potentially result in in
 Links to provider apis used in this code:
 
 OpenSky Network (ADSB data): https://openskynetwork.github.io/opensky-api/rest.html
+
 AviationStack (Flight plans): https://aviationstack.com/documentation
+
 Amadeus (Airport lookups): https://developers.amadeus.com/self-service/category/air/api-doc/airport-and-city-search/api-reference
+
+Amadeus (OAuth support): https://developers.amadeus.com/self-service/apis-docs/guides/authorization-262
 
 

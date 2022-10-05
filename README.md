@@ -11,10 +11,9 @@ Links to provider apis used in this code:
 
 OpenSky Network (ADSB data): https://openskynetwork.github.io/opensky-api/rest.html
 
-AviationStack (Flight plans): https://aviationstack.com/documentation
+AviationStack (Flight plans/100 free per month): https://aviationstack.com/documentation
 
-Amadeus (Airport lookups): https://developers.amadeus.com/self-service/category/air/api-doc/airport-and-city-search/api-reference
+FlightLabs (Airport lookups/100 free per month): https://app.goflightlabs.com/dashboard#getAirportData
 
-Amadeus (OAuth support): https://developers.amadeus.com/self-service/apis-docs/guides/authorization-262
 
 

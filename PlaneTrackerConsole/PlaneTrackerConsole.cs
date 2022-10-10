@@ -17,6 +17,8 @@ public class PlaneTrackerConsole
     
     private static IPlaneLookup lookup = new OpenNetworkLookup();
     
+    private static List<IFlightPlan> flightPlans = new List<IFlightPlan>();
+    
     public static void Main(string[] args)
     {
         var iataCode = "RDU";       // default is Raleigh Durham
@@ -44,18 +46,19 @@ public class PlaneTrackerConsole
         // Testing airport coordinates with a box extending 50NM each compass cardinal direction (NSEW)
 //      var planes = lookup.GetPlanesCenteredOn(new Coordinate(35.8801f), new Coordinate(-78.7880f), 100f);
         var planes = lookup.GetPlanesCenteredOn(new Coordinate(airport.AirportLatitude), new Coordinate(airport.AirportLongitude), 100f);
-        List<IFlightPlan> flightPlans = new List<IFlightPlan>();
         if (planes.Count > 0)
         {
             flightPlans.AddRange(flightPlanLookup.GetFlightPlansForFlightsForAirportIATA(iataCode));
         }
+        Console.WriteLine($"Loaded {flightPlans.Count} flight plans originating and terminating at {iataCode}");
+        
         foreach (var plane in planes)
         {
-            ShowPlane(plane, flightPlans);
+            ShowPlane(plane);
         }
     }
 
-    private static void ShowPlane(IPlane plane, List<IFlightPlan> flightPlans)
+    private static void ShowPlane(IPlane plane)
     {
         Console.WriteLine($"{plane.ICAO24} -> Call sign: {plane.CallSign} -- Type: {plane.PlaneType}");
         Console.WriteLine($"\tPosition: {plane.Latitude} (lat), {plane.Longitude} (long)");
@@ -64,13 +67,11 @@ public class PlaneTrackerConsole
         Console.WriteLine($"\tSpeed (kt): {plane.VelocityInKnots}");
         Console.WriteLine($"\tVertical rate (ft/s): {plane.VerticalRateInFeetPerSecond}");
 
-        if (plane.PlaneType == PlaneType.Plane && plane.CallSign != null && plane.CallSign.Length == 7)
+        if (plane.CallSign != null)
         {
-            var plans = flightPlans.Where(fp => fp.AircraftICAO24 != null && fp.AircraftICAO24 == plane.ICAO24).ToList();
-            // TODO: determine the timeframe of the plan if more than one?
-            if (plans.Count > 0)
+            var flightPlan = SearchFlightPlansFor(plane);
+            if (flightPlan != null)
             {
-                var flightPlan = plans[0];
                 Console.WriteLine($"$\tFlight departed: {flightPlan.DepartureAirportName} -- ICAO: {flightPlan.DepartureAirportICAOCode} -- IATA: {flightPlan.DepartureAirportIATACode}");
                 Console.WriteLine($"$\tFlight destination: {flightPlan.ArrivalAirportName} -- ICAO: {flightPlan.ArrivalAirportICAOCode} -- IATA: {flightPlan.ArrivalAirportIATACode}");
             }
@@ -89,5 +90,17 @@ public class PlaneTrackerConsole
 
         Console.WriteLine("-------------");
         Console.WriteLine();
+    }
+
+    private static IFlightPlan? SearchFlightPlansFor(IPlane plane)
+    {
+        var matchingPlans = flightPlans.Where(fp => fp.AircraftICAO24 != null && fp.AircraftICAO24 == plane.ICAO24).ToList();
+        if (matchingPlans.Count == 0 && plane.CallSign != null)
+        {
+            matchingPlans = flightPlans.Where(fp => fp.FlightNumberIATA == plane.CallSign).ToList();
+        }
+        
+        // TODO: determine the timeframe of the plan if more than one?
+        return matchingPlans.Count == 0 ? null : matchingPlans[0];
     }
 }

@@ -3,7 +3,7 @@ namespace ADSBLookup;
 public interface IPlane
 {
     public string ICAO24 { get; }
-    public string CallSign { get; }
+    public string? CallSign { get; }
     public string OriginCountry { get; }
     public int TimePosition { get; }
     public int LastContact { get; }

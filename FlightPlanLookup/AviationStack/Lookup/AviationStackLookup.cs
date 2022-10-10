@@ -19,7 +19,11 @@ public class AviationStackLookup : IFlightPlanLookup
 		{
 			return new List<IFlightPlan>();
 		}
-		var response = GetFlightPlansFromAviationStackByFlightICAO(flightICAO).Result;
+		return ExtractFlightPlansFromResponse(GetFlightPlansFromAviationStackByFlightICAO(flightICAO).Result);
+	}
+
+	private static List<IFlightPlan> ExtractFlightPlansFromResponse(AviationStackFlightPlans? response)
+	{
 		var flightPlans = new List<IFlightPlan>();
 		if (response != null)
 		{
@@ -28,6 +32,7 @@ public class AviationStackLookup : IFlightPlanLookup
 				flightPlans.Add(plan.FlightPlan);
 			}
 		}
+
 		return flightPlans;
 	}
 
@@ -37,46 +42,22 @@ public class AviationStackLookup : IFlightPlanLookup
 		{
 			return new List<IFlightPlan>();
 		}
-		var response = GetFlightPlansFromAviationStackByFlightIATA(flightIATA).Result;
-		var flightPlans = new List<IFlightPlan>();
-		if (response != null)
-		{
-			foreach (var plan in response.plans)
-			{
-				flightPlans.Add(plan.FlightPlan);
-			}
-		}
-
-		return flightPlans;
+		return ExtractFlightPlansFromResponse(GetFlightPlansFromAviationStackByFlightIATA(flightIATA).Result);
 	}
 
 	public List<IFlightPlan> GetFlightPlansForFlightsForAirportICAO(string airportICAO)
 	{
-		var response = GetFlightPlansForAirportICAOFromAviationStack(airportICAO).Result;
 		var flightPlans = new List<IFlightPlan>();
-		if (response != null)
-		{
-			foreach (var plan in response.plans)
-			{
-				flightPlans.Add(plan.FlightPlan);
-			}
-		}
-
+		flightPlans.AddRange(ExtractFlightPlansFromResponse(GetFlightPlansForAirportICAOFromAviationStack(airportICAO, true).Result));
+		flightPlans.AddRange(ExtractFlightPlansFromResponse(GetFlightPlansForAirportICAOFromAviationStack(airportICAO, false).Result));
 		return flightPlans;
 	}
 	
 	public List<IFlightPlan> GetFlightPlansForFlightsForAirportIATA(string airportIATA)
 	{
-		var response = GetFlightPlansForAirportIATAFromAviationStack(airportIATA).Result;
 		var flightPlans = new List<IFlightPlan>();
-		if (response != null)
-		{
-			foreach (var plan in response.plans)
-			{
-				flightPlans.Add(plan.FlightPlan);
-			}
-		}
-
+		flightPlans.AddRange(ExtractFlightPlansFromResponse(GetFlightPlansForAirportIATAFromAviationStack(airportIATA, true).Result));
+		flightPlans.AddRange(ExtractFlightPlansFromResponse(GetFlightPlansForAirportIATAFromAviationStack(airportIATA, false).Result));
 		return flightPlans;
 	}
 	
@@ -85,9 +66,10 @@ public class AviationStackLookup : IFlightPlanLookup
 		var queryString = new StringBuilder();
 		queryString.Append($"?access_key={this.accessKey}");
 		queryString.Append($"&airline_iata={flightICAO}");
-		queryString.Append($"flight_date={DateTime.Now.ToString("yyyy-MM-dd")}");
+// not supported by free plan (setting date)		
+//		queryString.Append($"&flight_date={DateTime.Now.ToString("yyyy-MM-dd")}");
 		
-		return await RequestFromAviationStack(queryString);
+		return await RequestFromAviationStack(queryString.ToString());
 	}
 	
 	private async Task<AviationStackFlightPlans> GetFlightPlansFromAviationStackByFlightIATA(string flightIATA)
@@ -95,48 +77,63 @@ public class AviationStackLookup : IFlightPlanLookup
 		var queryString = new StringBuilder();
 		queryString.Append($"?access_key={this.accessKey}");
 		queryString.Append($"&airline_iata={flightIATA}");
-		queryString.Append($"flight_date={DateTime.Now.ToString("yyyy-MM-dd")}");
+// not supported by free plan (setting date)		
+//		queryString.Append($"&flight_date={DateTime.Now.ToString("yyyy-MM-dd")}");
 		
-		return await RequestFromAviationStack(queryString);
+		return await RequestFromAviationStack(queryString.ToString());
 	}
 
-	private async Task<AviationStackFlightPlans> GetFlightPlansForAirportICAOFromAviationStack(string airportICAO)
+	private async Task<AviationStackFlightPlans> GetFlightPlansForAirportICAOFromAviationStack(string airportICAO, bool isArrival)
 	{
 		var queryString = new StringBuilder();
 		queryString.Append($"?access_key={this.accessKey}");
-		queryString.Append($"&dep_icao={airportICAO}");
-		queryString.Append($"&arr_icao={airportICAO}");
-		queryString.Append($"flight_date={DateTime.Now.ToString("yyyy-MM-dd")}");
+		if (isArrival)
+		{
+			queryString.Append($"&dep_icao={airportICAO}");
+		}
+		else
+		{
+			queryString.Append($"&arr_icao={airportICAO}");
+		}
+// not supported by free plan (setting date)		
+//		queryString.Append($"&flight_date={DateTime.Now.ToString("yyyy-MM-dd")}");
 		
 		var client = new HttpClient();
 		client.BaseAddress = new Uri(AVIATION_STACK_URL);
 		client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-		return await RequestFromAviationStack(queryString);
+		return await RequestFromAviationStack(queryString.ToString());
 	}
 	
-	private async Task<AviationStackFlightPlans> GetFlightPlansForAirportIATAFromAviationStack(string airportIATA)
+	private async Task<AviationStackFlightPlans> GetFlightPlansForAirportIATAFromAviationStack(string airportIATA, bool isArrival)
 	{
 		var queryString = new StringBuilder();
 		queryString.Append($"?access_key={this.accessKey}");
-		queryString.Append($"&dep_iata={airportIATA}");
-		queryString.Append($"&arr_iata={airportIATA}");
-		queryString.Append($"flight_date={DateTime.Now.ToString("yyyy-MM-dd")}");
+		if (isArrival)
+		{
+			queryString.Append($"&dep_iata={airportIATA}");
+		}
+		else
+		{
+			queryString.Append($"&arr_iata={airportIATA}");
+		}
+// not supported by free plan (setting date)		
+//		queryString.Append($"&flight_date={DateTime.Now.ToString("yyyy-MM-dd")}");
 		
 		var client = new HttpClient();
 		client.BaseAddress = new Uri(AVIATION_STACK_URL);
 		client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-		return await RequestFromAviationStack(queryString);
+		return await RequestFromAviationStack(queryString.ToString());
 	}
 	
-	private static async Task<AviationStackFlightPlans> RequestFromAviationStack(StringBuilder queryString)
+	private static async Task<AviationStackFlightPlans> RequestFromAviationStack(string queryString)
 	{
 		var client = new HttpClient();
 		client.BaseAddress = new Uri(AVIATION_STACK_URL);
 		client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-		HttpResponseMessage response = await client.GetAsync(queryString.ToString()).ConfigureAwait(false);
+		HttpResponseMessage response = await client.GetAsync(queryString).ConfigureAwait(false);
 		if (response.IsSuccessStatusCode)
 		{
 			var json = await response.Content.ReadAsStringAsync();

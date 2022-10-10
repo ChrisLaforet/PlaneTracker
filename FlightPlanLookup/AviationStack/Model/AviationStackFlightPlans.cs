@@ -37,15 +37,15 @@ public class Plan
                 DepartureAirportName = departure.airport,
                 DepartureAirportIATACode = departure.iata,
                 DepartureAirportICAOCode = departure.icao,
-                AircraftRegistration = aircraft.registration,
-                AirlineName = airline.name,
-                AirlineCodeIATA = airline.iata,
-                AirlineCodeICAO = airline.icao,
-                FlightNumberIATA = flight.iata,
-                FlightNumberICAO = flight.icao,
-                AircraftICAO24 = aircraft.icao24,
-                AircraftTypeIATA = aircraft.iata,
-                AircraftTypeICAO = aircraft.icao
+                AircraftRegistration = aircraft?.registration,
+                AirlineName = airline?.name,
+                AirlineCodeIATA = airline?.iata,
+                AirlineCodeICAO = airline?.icao,
+                FlightNumberIATA = flight?.iata,
+                FlightNumberICAO = flight?.icao,
+                AircraftICAO24 = aircraft?.icao24,
+                AircraftTypeIATA = aircraft?.iata,
+                AircraftTypeICAO = aircraft?.icao
             };
 
         }
@@ -76,12 +76,12 @@ public class Arrival
     public string terminal { get; set; }
     public string gate { get; set; }
     public string baggage { get; set; }
-    public int delay { get; set; }
-    public DateTime scheduled { get; set; }
-    public DateTime estimated { get; set; }
-    public object actual { get; set; }
-    public object estimated_runway { get; set; }
-    public object actual_runway { get; set; }
+    public int? delay { get; set; }
+    public DateTime? scheduled { get; set; }
+    public DateTime? estimated { get; set; }
+    public DateTime? actual { get; set; }
+    public object? estimated_runway { get; set; }
+    public object? actual_runway { get; set; }
 }
 
 public class Departure
@@ -92,12 +92,12 @@ public class Departure
     public string icao { get; set; }
     public string terminal { get; set; }
     public string gate { get; set; }
-    public int delay { get; set; }
-    public DateTime scheduled { get; set; }
-    public DateTime estimated { get; set; }
-    public DateTime actual { get; set; }
-    public DateTime estimated_runway { get; set; }
-    public DateTime actual_runway { get; set; }
+    public int? delay { get; set; }
+    public DateTime? scheduled { get; set; }
+    public DateTime? estimated { get; set; }
+    public DateTime? actual { get; set; }
+    public object? estimated_runway { get; set; }
+    public object? actual_runway { get; set; }
 }
 
 public class Flight

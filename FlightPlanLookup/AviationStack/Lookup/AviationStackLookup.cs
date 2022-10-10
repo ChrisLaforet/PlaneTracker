@@ -13,13 +13,13 @@ public class AviationStackLookup : IFlightPlanLookup
 
 	public AviationStackLookup(string accessKey) => this.accessKey = accessKey;
 
-	public List<IFlightPlan> GetFlightPlanForFlightICAO(string code)
+	public List<IFlightPlan> GetFlightPlanForFlightICAO(string flightICAO)
 	{
-		if (string.IsNullOrEmpty(code))
+		if (string.IsNullOrEmpty(flightICAO))
 		{
 			return new List<IFlightPlan>();
 		}
-		var response = GetFlightPlansFromAviationStack(null, code).Result;
+		var response = GetFlightPlansFromAviationStackByFlightICAO(flightICAO).Result;
 		var flightPlans = new List<IFlightPlan>();
 		if (response != null)
 		{
@@ -31,13 +31,13 @@ public class AviationStackLookup : IFlightPlanLookup
 		return flightPlans;
 	}
 
-	public List<IFlightPlan> GetFlightPlanForFlightIATA(string code)
+	public List<IFlightPlan> GetFlightPlanForFlightIATA(string flightIATA)
 	{
-		if (string.IsNullOrEmpty(code))
+		if (string.IsNullOrEmpty(flightIATA))
 		{
 			return new List<IFlightPlan>();
 		}
-		var response = GetFlightPlansFromAviationStack(code, null).Result;
+		var response = GetFlightPlansFromAviationStackByFlightIATA(flightIATA).Result;
 		var flightPlans = new List<IFlightPlan>();
 		if (response != null)
 		{
@@ -50,21 +50,88 @@ public class AviationStackLookup : IFlightPlanLookup
 		return flightPlans;
 	}
 
-	private async Task<AviationStackFlightPlans> GetFlightPlansFromAviationStack(string iataCode, string icaoCode)
+	public List<IFlightPlan> GetFlightPlansForFlightsForAirportICAO(string airportICAO)
+	{
+		var response = GetFlightPlansForAirportICAOFromAviationStack(airportICAO).Result;
+		var flightPlans = new List<IFlightPlan>();
+		if (response != null)
+		{
+			foreach (var plan in response.plans)
+			{
+				flightPlans.Add(plan.FlightPlan);
+			}
+		}
+
+		return flightPlans;
+	}
+	
+	public List<IFlightPlan> GetFlightPlansForFlightsForAirportIATA(string airportIATA)
+	{
+		var response = GetFlightPlansForAirportIATAFromAviationStack(airportIATA).Result;
+		var flightPlans = new List<IFlightPlan>();
+		if (response != null)
+		{
+			foreach (var plan in response.plans)
+			{
+				flightPlans.Add(plan.FlightPlan);
+			}
+		}
+
+		return flightPlans;
+	}
+	
+	private async Task<AviationStackFlightPlans> GetFlightPlansFromAviationStackByFlightICAO(string flightICAO)
 	{
 		var queryString = new StringBuilder();
 		queryString.Append($"?access_key={this.accessKey}");
-		if (!string.IsNullOrEmpty(iataCode))
-		{
-			queryString.Append($"&airline_iata={iataCode}");
-		}
-
-		if (!string.IsNullOrEmpty(icaoCode))
-		{
-			queryString.Append($"&airline_icao={icaoCode}");
-		}
+		queryString.Append($"&airline_iata={flightICAO}");
 		queryString.Append($"flight_date={DateTime.Now.ToString("yyyy-MM-dd")}");
 		
+		return await RequestFromAviationStack(queryString);
+	}
+	
+	private async Task<AviationStackFlightPlans> GetFlightPlansFromAviationStackByFlightIATA(string flightIATA)
+	{
+		var queryString = new StringBuilder();
+		queryString.Append($"?access_key={this.accessKey}");
+		queryString.Append($"&airline_iata={flightIATA}");
+		queryString.Append($"flight_date={DateTime.Now.ToString("yyyy-MM-dd")}");
+		
+		return await RequestFromAviationStack(queryString);
+	}
+
+	private async Task<AviationStackFlightPlans> GetFlightPlansForAirportICAOFromAviationStack(string airportICAO)
+	{
+		var queryString = new StringBuilder();
+		queryString.Append($"?access_key={this.accessKey}");
+		queryString.Append($"&dep_icao={airportICAO}");
+		queryString.Append($"&arr_icao={airportICAO}");
+		queryString.Append($"flight_date={DateTime.Now.ToString("yyyy-MM-dd")}");
+		
+		var client = new HttpClient();
+		client.BaseAddress = new Uri(AVIATION_STACK_URL);
+		client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+		return await RequestFromAviationStack(queryString);
+	}
+	
+	private async Task<AviationStackFlightPlans> GetFlightPlansForAirportIATAFromAviationStack(string airportIATA)
+	{
+		var queryString = new StringBuilder();
+		queryString.Append($"?access_key={this.accessKey}");
+		queryString.Append($"&dep_iata={airportIATA}");
+		queryString.Append($"&arr_iata={airportIATA}");
+		queryString.Append($"flight_date={DateTime.Now.ToString("yyyy-MM-dd")}");
+		
+		var client = new HttpClient();
+		client.BaseAddress = new Uri(AVIATION_STACK_URL);
+		client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+		return await RequestFromAviationStack(queryString);
+	}
+	
+	private static async Task<AviationStackFlightPlans> RequestFromAviationStack(StringBuilder queryString)
+	{
 		var client = new HttpClient();
 		client.BaseAddress = new Uri(AVIATION_STACK_URL);
 		client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));

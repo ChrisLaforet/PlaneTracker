@@ -44,13 +44,18 @@ public class PlaneTrackerConsole
         // Testing airport coordinates with a box extending 50NM each compass cardinal direction (NSEW)
 //      var planes = lookup.GetPlanesCenteredOn(new Coordinate(35.8801f), new Coordinate(-78.7880f), 100f);
         var planes = lookup.GetPlanesCenteredOn(new Coordinate(airport.AirportLatitude), new Coordinate(airport.AirportLongitude), 100f);
+        List<IFlightPlan> flightPlans = new List<IFlightPlan>();
+        if (planes.Count > 0)
+        {
+            flightPlans.AddRange(flightPlanLookup.GetFlightPlansForFlightsForAirportIATA(iataCode));
+        }
         foreach (var plane in planes)
         {
-            ShowPlane(plane, flightPlanLookup);
+            ShowPlane(plane, flightPlans);
         }
     }
 
-    private static void ShowPlane(IPlane plane, IFlightPlanLookup flightPlanLookup)
+    private static void ShowPlane(IPlane plane, List<IFlightPlan> flightPlans)
     {
         Console.WriteLine($"{plane.ICAO24} -> Call sign: {plane.CallSign} -- Type: {plane.PlaneType}");
         Console.WriteLine($"\tPosition: {plane.Latitude} (lat), {plane.Longitude} (long)");
@@ -59,6 +64,18 @@ public class PlaneTrackerConsole
         Console.WriteLine($"\tSpeed (kt): {plane.VelocityInKnots}");
         Console.WriteLine($"\tVertical rate (ft/s): {plane.VerticalRateInFeetPerSecond}");
 
+        if (plane.PlaneType == PlaneType.Plane && plane.CallSign != null && plane.CallSign.Length == 7)
+        {
+            var plans = flightPlans.Where(fp => fp.AircraftICAO24 != null && fp.AircraftICAO24 == plane.ICAO24).ToList();
+            // TODO: determine the timeframe of the plan if more than one?
+            if (plans.Count > 0)
+            {
+                var flightPlan = plans[0];
+                Console.WriteLine($"$\tFlight departed: {flightPlan.DepartureAirportName} -- ICAO: {flightPlan.DepartureAirportICAOCode} -- IATA: {flightPlan.DepartureAirportIATACode}");
+                Console.WriteLine($"$\tFlight destination: {flightPlan.ArrivalAirportName} -- ICAO: {flightPlan.ArrivalAirportICAOCode} -- IATA: {flightPlan.ArrivalAirportIATACode}");
+            }
+        }
+        
         // if (plane.PlaneType == PlaneType.Plane && plane.CallSign != null && plane.CallSign.Length == 7)
         // {
         //     var flightPlans = flightPlanLookup.GetFlightPlanForFlightIATA(plane.CallSign);

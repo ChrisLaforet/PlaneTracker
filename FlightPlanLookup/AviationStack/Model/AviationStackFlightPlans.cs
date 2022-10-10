@@ -36,7 +36,16 @@ public class Plan
                 ArrivalAirportICAOCode = arrival.icao,
                 DepartureAirportName = departure.airport,
                 DepartureAirportIATACode = departure.iata,
-                DepartureAirportICAOCode = departure.icao              
+                DepartureAirportICAOCode = departure.icao,
+                AircraftRegistration = aircraft.registration,
+                AirlineName = airline.name,
+                AirlineCodeIATA = airline.iata,
+                AirlineCodeICAO = airline.icao,
+                FlightNumberIATA = flight.iata,
+                FlightNumberICAO = flight.icao,
+                AircraftICAO24 = aircraft.icao24,
+                AircraftTypeIATA = aircraft.iata,
+                AircraftTypeICAO = aircraft.icao
             };
 
         }
